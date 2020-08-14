@@ -2,7 +2,7 @@
 
 
 - Reinforcement learning environment by Unity ML-Agents
-- This repository corresponds to **Project #2** of Udacity's Deep Reinforcement Learning Nanodegree (drlnd)\
+- This repository corresponds to **Project #2 (version 2)** of Udacity's Deep Reinforcement Learning Nanodegree (drlnd)\
   https://www.udacity.com/course/deep-reinforcement-learning-nanodegree--nd893
 - Continuous control using the actor-critic method
 
@@ -51,7 +51,7 @@ The environment is considered solved when the score, which was **averaged over a
 
 ## Contents of files
 
-The repo contains:
+The repository contains:
 | File Name | Notes |
 | ----------- | ----------- |
 | SL_reacher20_ddpg.ipynb | main code |
@@ -68,7 +68,7 @@ The repo contains:
 Paste the path to Reacher.exe after the "file_name = "\
 for example, file_name = "./Reacher_20Agent_Windows_x86_64/Reacher.exe"
 #### 3. Run `Box 2` to set hyperparameters
-For details of the hyperparameters, please refer to Report.md
+For details of the hyperparameters, please refer to `Report.md`
 #### 4. Run `Box 3` to start training
 A figure of noise process simulation will be displayed first, which can be used for tuning the hypermeters of the noise process.\
 After training, the weights of the actor and critic will be saved with the file names `checkpoint_actor.pth` and `checkpoint_critic.pth`
