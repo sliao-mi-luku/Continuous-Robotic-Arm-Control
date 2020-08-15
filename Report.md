@@ -1,16 +1,17 @@
 # Report.md
 
-# THIS IS STILL A MANUSCRIPT
-
 ## Deep Deterministic Policy Gradient (DDPG)
 
-### DDPG paper (*T. P. Lillicrap et al., 2016*)
+### DDPG paper
 
-Continuous control with deep reinforcement learning
-
-https://arxiv.org/pdf/1509.02971.pdf
+T. P. Lillicrap et al., 2016. Continuous control with deep reinforcement learning (https://arxiv.org/pdf/1509.02971.pdf)
 
 ### The basics of DDPG
+
+DDPG trains a deep neural network (**actor**) to learn the policy, i.e., it outputs the actions (whose space is continuous) given the current state. It then trains a second deep neural network (**critic**) to learn the action-value function of the policy. The weights of the actor network is updated by maximizing the action-value that the critic network produces. The weights of the critic network is trained by minimizing the TD error of it's action-values.
+
+Similar to the Deep Q-Learning (DQN), DDPG uses a replay buffer to store the experiences. Replays were sampled randomly from the buffer to train both the actor and critic networks. DDPG also uses 2 networks (local and target) for both the actor and the critic networks. The weights of the target networks were updated by the soft-update technique.
+
 
 
 ### Neural network architecture
@@ -33,18 +34,16 @@ After ReLU activation, the output (size = 400) is concatenated with the action v
 More details can be found in the file `networkModels.py`
 
 ### The noise process
-The essence of policy-based methods is that, in the sense of exploration, the agent needs to try some new actions that are slightly different from the one prescribed by the current policy. This can simply be achieved by obtaining the action by the policy and then adding some noise to it. The magnitude of the noise determines how far away from the current optimal policy the agent wants to explore for putative better policies that can yield better reward.
+The essence of policy-based methods is that, to carry out the exploration, the agent needs to try some new actions that are slightly different from the one prescribed by the current policy. In the case where the action space is continuous, this can simply be achieved by calculating the action by the policy and then adding some noise to it. The magnitude of the noise determines how far away from the current optimal policy the agent wants to explore for putative better policies yielding higher rewards.
 
 In the **DDPG paper**, the authors modeled the noise by the **Ornstein-Uhlenbeck Process** (OU noise)
 
 **why OU noise?**
-In a nutshell, compared to the Gaussian noise, which is pure diffusion, the Ornstein-Uhlenbeck process has an additional **drift** term. If the direction of the drift is always pointing toward the initial value, it can be pictured as a drag toward to the initial value that prevents the noise to diffuse toward +/- infinity.
+In a nutshell, compared to the Gaussian noise, which consists of pure diffusion, the Ornstein-Uhlenbeck process has an additional **drift** component. If the direction of the drift is set to be always pointing toward the mean value, it can be pictured as a drag that prevents the noise from diffusing to +/- infinity. (note that in the case of Gaussian noise, as time increases to infinity, the noise will also diffuse to +/- infinity)
 
-This is also manifesting the drawback of using Gaussian noise, as time increases to infinity, the Gaussian process goes to +/- infinity.
+The OU noise can be modeled by 2 parameters, `ou_theta` that controls the size of the drift, and `ou_sigma` that controls the size of diffusion. In the **DDPG paper**, the authors used `ou_theta` = 0.15 and `ou_sigma` = 0.20. In this project I used `ou_theta` = 0.15 and `ou_sigma` = 0.10. Moreover, I slowly decreased the scaling facor `ou_scale` of the noise from 1.0, by the decay rate `ou_decay` = 0.995 in each episode.
 
-The OU noise can be modeled by 2 parameters, `ou_theta` that controls the size of the drift, and `ou_sigma` that controls the size of diffusion. In the **DDPG paper**, the authors used `ou_theta` = 0.15 and `ou_sigma` = 0.20. In this project I used `ou_theta` = 0.15 and `ou_sigma` = 0.10. Furthermore, I slowly decreased the scaling facor `ou_scale` of the OU noise from 1 (initial scaling) by the decay rate `ou_decay` = 0.995 for each episode.
-
-For more details on the Ornstein-Uhlenbeck Process, please refer to the textbook *Stochastic Methods, a handbook for the natural and social sciences* by Crispin Gardiner (https://www.springer.com/gp/book/9783540707127).
+For more details of the Ornstein-Uhlenbeck Process, please refer to the textbook *Stochastic Methods, a handbook for the natural and social sciences* by Crispin Gardiner (https://www.springer.com/gp/book/9783540707127).
 
 
 ### The DDPG algorithm
@@ -52,8 +51,6 @@ For more details on the Ornstein-Uhlenbeck Process, please refer to the textbook
 Below is a brief description of DDPG:
 
 - initialize the agent with the actor (local and target) and critic (local and target) networks
-  > we call them `actor_local`, `actor_target`, `critic_local` and `critic_target`
-  > `actor_local` and `actor_target` will have the same initial weights, and so do `critic_local` and `critic_target`
 - t_step = 0
 - observe the initial state **s** (size = 33) from the environment
 - while the environment is not solved:
@@ -90,12 +87,15 @@ Below is a brief description of DDPG:
   - s <-- s'
 
 
+In this project, we have 20 identical agents (robot arms) interacting with the enironment. Therefore, at each time step, 20 different experience tuples are added into the buffer. All 20 agents share the same actor and critic networks, whose weights were updated by sampling the replays at each time step (as long as there're enough replays to sample).
+
+
 ## Hyperparameters
 
 | Hyperparameter | Value | Description | Reference |
 | ----------- | ----------- | ----------- | ----------- |
-| actor_hidden_sizes | [400, 300] | sizes of the hidden FC layers of actor | <1> |
-| critic_hidden_sizes | [400, 300] | sizes of the hidden FC layers of actor | <1> |
+| actor_hidden_sizes | [400, 300] | sizes of actor's hidden FC layers | <1> |
+| critic_hidden_sizes | [400, 300] | sizes of critic's the hidden FC layers | <1> |
 | gamma | 0.99 | discount rate | <1> |
 | actor_lr | 1e-3 | actor's learning rate |  |
 | critic_lr | 1e-4 | critic's learning rate |  |
@@ -109,8 +109,7 @@ Below is a brief description of DDPG:
 | buffer_size | 1e6 | size of the replay buffer | <1> |
 | batch_size | 512 | size of the minibatch |  |
 
-<1> Theses are the values used in the original DDPG paper\
-https://arxiv.org/pdf/1509.02971.pdf \
+<1> Theses are the values used in the original DDPG paper (https://arxiv.org/pdf/1509.02971.pdf)\
 Please refer to the **Experiment details** in the paper for more information.
 
 
@@ -122,8 +121,8 @@ With the parameters above, the agent solved the task after 0 episodes, i.e., the
 
 ## Ideas for future work
 
-**1. Promimal Policy Optimization (PPO)**
+By using the hyperparameters listed above, the agent performs very well on the task. However, I'll spending some more time trying different values of the learning rates of the actor and critic networks to see if better performance can be made. The second thing I'll try out is to change the architecture of the critic network, making it different from the one that DDPG paper used. For example, passing the state vector and action vector to 2 separate input layer, and concatenate them and pass to the second hidden layer.
 
-**2. Asynchronous Advantage Actor-Critic (A3C)**
+Besides DDPG, there are many state-of-the-art policy-based algorithm such as **Proximal Policy Optimization (PPO)** and **Deep Distributed Distributional Deterministic Policy Gradient (D4PG)**. I'll implement them after some further reading.
 
 [![p2-env-demo-trained.png](https://i.postimg.cc/WpSLcNCt/p2-env-demo-trained.png)](https://postimg.cc/5jHkwVxM)
