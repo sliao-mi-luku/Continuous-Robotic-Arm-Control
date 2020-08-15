@@ -4,13 +4,13 @@
 
 ### DDPG paper
 
-T. P. Lillicrap et al., 2016. Continuous control with deep reinforcement learning (https://arxiv.org/pdf/1509.02971.pdf)
+T. P. Lillicrap et al., 2016. *Continuous control with deep reinforcement learning* (https://arxiv.org/pdf/1509.02971.pdf)
 
 ### The basics of DDPG
 
 DDPG trains a deep neural network (**actor**) to learn the policy, i.e., it outputs the actions (whose space is continuous) given the current state. It then trains a second deep neural network (**critic**) to learn the action-value function of the policy. The weights of the actor network is updated by maximizing the action-value that the critic network produces. The weights of the critic network is trained by minimizing the TD error of it's action-values.
 
-Similar to the Deep Q-Learning (DQN), DDPG uses a replay buffer to store the experiences. Replays were sampled randomly from the buffer to train both the actor and critic networks. DDPG also uses 2 networks (local and target) for both the actor and the critic networks. The weights of the target networks were updated by the soft-update technique.
+Similar to Deep Q-Learning (DQN), DDPG uses a replay buffer to store the experiences. Replays were sampled randomly from the buffer to train both the actor and critic networks. DDPG also uses 2 networks (local and target) for both the actor and the critic networks. The weights of the target networks were updated by the soft-update technique.
 
 
 
@@ -20,7 +20,7 @@ The default architectures of the actor (both local and target) consist of:
 
 - **input layer**: a fully connected layer with input size = 33, output size = 400, activation function = ReLU
 - **hidden layer**: a fully connected layer with input size = 400, output size = 300, activation function = ReLU
-- **output layer**: a fully connected layer with input size = 300, output size = 4
+- **output layer**: a fully connected layer with input size = 300, output size = 4, activation function = tanh
 
 The default architectures of the critic (both local and target) consist of:
 
@@ -41,7 +41,7 @@ In the **DDPG paper**, the authors modeled the noise by the **Ornstein-Uhlenbeck
 **why OU noise?**
 In a nutshell, compared to the Gaussian noise, which consists of pure diffusion, the Ornstein-Uhlenbeck process has an additional **drift** component. If the direction of the drift is set to be always pointing toward the mean value, it can be pictured as a drag that prevents the noise from diffusing to +/- infinity. (note that in the case of Gaussian noise, as time increases to infinity, the noise will also diffuse to +/- infinity)
 
-The OU noise can be modeled by 2 parameters, `ou_theta` that controls the size of the drift, and `ou_sigma` that controls the size of diffusion. In the **DDPG paper**, the authors used `ou_theta` = 0.15 and `ou_sigma` = 0.20. In this project I used `ou_theta` = 0.15 and `ou_sigma` = 0.10. Moreover, I slowly decreased the scaling facor `ou_scale` of the noise from 1.0, by the decay rate `ou_decay` = 0.995 in each episode.
+The OU noise can be modeled by 2 parameters, `ou_theta` that controls the magnitude of the drift term, and `ou_sigma` that controls the magnitude of the diffusion term. In the **DDPG paper**, the authors used `ou_theta` = 0.15 and `ou_sigma` = 0.20. In this project I used `ou_theta` = 0.15 and `ou_sigma` = 0.10. Moreover, I slowly decreased the scaling factor `ou_scale` of the noise from 1.0, by the decay rate `ou_decay` = 0.995 in each episode.
 
 For more details of the Ornstein-Uhlenbeck Process, please refer to the textbook *Stochastic Methods, a handbook for the natural and social sciences* by Crispin Gardiner (https://www.springer.com/gp/book/9783540707127).
 
@@ -87,7 +87,7 @@ Below is a brief description of DDPG:
   - s <-- s'
 
 
-In this project, we have 20 identical agents (robot arms) interacting with the enironment. Therefore, at each time step, 20 different experience tuples are added into the buffer. All 20 agents share the same actor and critic networks, whose weights were updated by sampling the replays at each time step (as long as there're enough replays to sample).
+In this project, we have 20 identical agents (robot arms) interacting with the environment. Therefore, at each time step, 20 different experience tuples are added into the buffer. All 20 agents share the same actor and critic networks, whose weights were updated by sampling the replays at each time step (as long as there're enough replays to sample).
 
 
 ## Hyperparameters
@@ -109,7 +109,7 @@ In this project, we have 20 identical agents (robot arms) interacting with the e
 | buffer_size | 1e6 | size of the replay buffer | <1> |
 | batch_size | 512 | size of the minibatch |  |
 
-<1> Theses are the values used in the original DDPG paper (https://arxiv.org/pdf/1509.02971.pdf)\
+<1> Theses are the values used in the original DDPG paper (https://arxiv.org/pdf/1509.02971.pdf)
 Please refer to the **Experiment details** in the paper for more information.
 
 
@@ -121,8 +121,9 @@ With the parameters above, the agent solved the task after 0 episodes, i.e., the
 
 ## Ideas for future work
 
-By using the hyperparameters listed above, the agent performs very well on the task. However, I'll spending some more time trying different values of the learning rates of the actor and critic networks to see if better performance can be made. The second thing I'll try out is to change the architecture of the critic network, making it different from the one that DDPG paper used. For example, passing the state vector and action vector to 2 separate input layer, and concatenate them and pass to the second hidden layer.
+By using the hyperparameters listed above, the agent performs very well on the task. However, I'll spending some more time trying different values of the learning rates of the actor and critic networks to see if better performance can be made. The second thing I'll try out is to change the architecture of the critic network, making it different from the one that DDPG paper used. For example, I'll try passing the state vector and action vector to 2 separate input layers, and concatenate them and pass them together through the second hidden layer.
 
 Besides DDPG, there are many state-of-the-art policy-based algorithm such as **Proximal Policy Optimization (PPO)** and **Deep Distributed Distributional Deterministic Policy Gradient (D4PG)**. I'll implement them after some further reading.
+
 
 [![p2-env-demo-trained.png](https://i.postimg.cc/WpSLcNCt/p2-env-demo-trained.png)](https://postimg.cc/5jHkwVxM)
