@@ -117,7 +117,8 @@ Please refer to the **Experiment details** in the paper for more information.
 
 With the parameters above, the agent solved the task after 0 episodes, i.e., the average (over agents) score from episode #1 to #100 reaches above +30.0 points.
 
-[![p2-scores.png](https://i.postimg.cc/bJ8HzjWw/p2-scores.png)](https://postimg.cc/XZHy8tnR)
+[![p2-scores.png](https://i.postimg.cc/bJ8HzjWw/p2-scores.png)](https://postimg.cc/XZHy8tnR)\
+**(figure)** *Average score (over agents) per episodes*
 
 ## Ideas for future work
 
@@ -133,4 +134,5 @@ https://github.com/udacity/deep-reinforcement-learning/tree/master/ddpg-pendulum
 3. Udacity's jupyter notebook template of **Project: Continuous Control**
 
 
-[![p2-env-demo-trained.png](https://i.postimg.cc/WpSLcNCt/p2-env-demo-trained.png)](https://postimg.cc/5jHkwVxM)
+[![p2-env-demo-trained.png](https://i.postimg.cc/WpSLcNCt/p2-env-demo-trained.png)](https://postimg.cc/5jHkwVxM)\
+**(figure)** *Agents have been trained to stay in the target regions!*
