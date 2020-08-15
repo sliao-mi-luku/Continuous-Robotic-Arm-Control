@@ -77,7 +77,7 @@ Below is a brief description of DDPG:
     **step 3: train `actor_local`**
     - use *actor_local* to determine the action **a_local** = actor_local(s)
     - use *critic_local* to calculate the action values and averaged over the sample batch to obtain the loss of actor:\
-    `actor_loss = -critic_local(s, a_local).mean() (averaged over the batch)`
+    `actor_loss = -critic_local(s, a_local).mean()` (averaged over the batch)
     - use gradient descent to update the weights of *actor_local*
     
     **step 4: update `actor_target` and `critic_target`**
@@ -135,4 +135,4 @@ https://github.com/udacity/deep-reinforcement-learning/tree/master/ddpg-pendulum
 
 
 [![p2-env-demo-trained.png](https://i.postimg.cc/WpSLcNCt/p2-env-demo-trained.png)](https://postimg.cc/5jHkwVxM)\
-**(figure)** *Agents have been trained to stay in the target regions!*
+**(figure)** *Agents have been trained to stay in their target regions!*
