@@ -55,7 +55,7 @@ Below is a brief description of DDPG:
 - observe the initial state **s** (size = 33) from the environment
 - while the environment is not solved:
   - t_step += 1
-  - use `actor_local` to determine the action **a**  = `actor_local(s)`
+  - use *actor_local* to determine the action **a** = actor_local(s)
   - use **a** to interact with the environment
   - collect the reward **r** and enter the next state (**s'**)
   - add the experience tuple **(s, a, r, s')** into the replay buffer
@@ -63,28 +63,28 @@ Below is a brief description of DDPG:
   - if there are enough (>= `batch_size`) replays in the buffer:
   
     **step 1: sample replays**
-    - randomly sample a batch of size = `batch_size` replay tuples **(s, a, r, s')** from the buffer\
+    - randomly sample a batch of size = `batch_size` replay tuples **(s, a, r, s')** from the buffer
     
     **step 2: train `critic_local`**
-    - use `actor_target` predict the future actions **a'** = actor_target(s')
-    - use `critic_target` to predict the action value of the next state **q_next** = `critic_target(s', a')`
+    - use *actor_target* predict the future actions **a'** = actor_target(s')
+    - use *critic_target* to predict the action value of the next state **q_next** = critic_target(s', a')
     - calculate the TD target of the action value **q_target** = **r** + gamma * **q_next**
-    - use `critic_local` to calculate the current action value **q_local** = `critic_local(s, a)`
+    - use *critic_local* to calculate the current action value **q_local** = critic_local(s, a)
     - define the loss function (Huber loss) to be the TD error, i.e.,\
-    `critic_loss = F.smooth_l1_loss(**q_local**, *q_target*)`
+    `critic_loss = F.smooth_l1_loss(q_local, q_target)`
     - use gradient decent to update the weights of *critic_local*
     
     **step 3: train `actor_local`**
-    - use `actor_local` to determine the action `a_local = actor_local(s)`
-    - use `critic_local` to calculate the action values and averaged over the sample batch to obtain the loss of actor:\
-    `actor_loss = -critic_local(s, a_local) (averaged over the batch)`
+    - use *actor_local* to determine the action **a_local** = actor_local(s)
+    - use *critic_local* to calculate the action values and averaged over the sample batch to obtain the loss of actor:\
+    `actor_loss = -critic_local(s, a_local).mean() (averaged over the batch)`
     - use gradient descent to update the weights of *actor_local*
     
     **step 4: update `actor_target` and `critic_target`**
-    - soft-update the weights of `actor_target` and `critic_target`\
-    `actor_target.weights <-- tau * actor_local.weights + (1-tau) * actor_target.weights`
+    - soft-update the weights of *actor_target* and *critic_target*\
+    `actor_target.weights <-- tau * actor_local.weights + (1-tau) * actor_target.weights`\
     `critic_target.weights <-- tau * critic_local.weights + (1-tau) * critic_target.weights`
-  - s <-- s'
+  - **s** <-- **s'**
 
 
 In this project, we have 20 identical agents (robot arms) interacting with the environment. Therefore, at each time step, 20 different experience tuples are added into the buffer. All 20 agents share the same actor and critic networks, whose weights were updated by sampling the replays at each time step (as long as there're enough replays to sample).
@@ -124,6 +124,13 @@ With the parameters above, the agent solved the task after 0 episodes, i.e., the
 By using the hyperparameters listed above, the agent performs very well on the task. However, I'll spending some more time trying different values of the learning rates of the actor and critic networks to see if better performance can be made. The second thing I'll try out is to change the architecture of the critic network, making it different from the one that DDPG paper used. For example, I'll try passing the state vector and action vector to 2 separate input layers, and concatenate them and pass them together through the second hidden layer.
 
 Besides DDPG, there are many state-of-the-art policy-based algorithm such as **Proximal Policy Optimization (PPO)** and **Deep Distributed Distributional Deterministic Policy Gradient (D4PG)**. I'll implement them after some further reading.
+
+## References in this project
+1. T. P. Lillicrap et al., 2016. *Continuous control with deep reinforcement learning*\
+https://arxiv.org/pdf/1509.02971.pdf
+2. Udacity's GitHub repository **ddpg-pendulum**\
+https://github.com/udacity/deep-reinforcement-learning/tree/master/ddpg-pendulum
+3. Udacity's jupyter notebook template of **Project: Continuous Control**
 
 
 [![p2-env-demo-trained.png](https://i.postimg.cc/WpSLcNCt/p2-env-demo-trained.png)](https://postimg.cc/5jHkwVxM)
