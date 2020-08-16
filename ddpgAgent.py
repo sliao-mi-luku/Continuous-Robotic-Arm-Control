@@ -177,5 +177,8 @@ class DDPG_Agent:
     
     
     def soft_update(self, local_nn, target_nn):
+        """
+        Soft-update the weight of the actor (or critic) target network
+        """
         for local_param, target_param in zip(local_nn.parameters(), target_nn.parameters()):
             target_param.data.copy_(self.tau*local_param.data + (1.0-self.tau)*target_param.data)    
