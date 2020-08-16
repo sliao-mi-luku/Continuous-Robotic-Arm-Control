@@ -102,7 +102,7 @@ for example, `file_name = "./Reacher_20Agent_Windows_x86_64/Reacher.exe"`
 #### 6. Run `Box 2` to set the hyperparameters
 For information of the hyperparameters, please refer to `Report.md`
 #### 7. Run `Box 3` to start training the agent
-A figure of the noise simulation will be displayed first, which can be used for tuning the parameters of the noise process.\
+A figure of the noise simulation will be displayed first, which can be used for tuning the parameters of the noise process. Please note that this simulation is independent of the noise process used in the ddpg traning, i.e., the exact noise values generated during training will be different from the values shown in the figure.
 After training, the weights and biases of the actor and critic networks will be saved with the file names `checkpoint_actor.pth` and `checkpoint_critic.pth`
 #### 8. (Optional) Run `Box 4` to load the saved weights into the agent and watch the performance
 #### 9. Before closing, simply use the command `env.close()` to close the environment
