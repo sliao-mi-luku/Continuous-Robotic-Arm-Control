@@ -118,7 +118,7 @@ Please refer to the **Experiment details** in the paper for more information.
 
 With the parameters above, the agent solved the task after 0 episodes, i.e., the average (over agents) score from episode #1 to #100 reaches above +30.0 points.
 
-[![p2-scores.png](https://i.postimg.cc/bJ8HzjWw/p2-scores.png)](https://postimg.cc/XZHy8tnR)\
+[![p2-scores.png](https://i.postimg.cc/CLqMxnF4/p2-scores.png)](https://postimg.cc/rKq2hmRd) \
 **(figure)** *Average score (over agents) of each episode*
 
 
