@@ -36,41 +36,61 @@ The environment is considered solved when the score, **averaged over all 20 agen
 
 
 ## Getting started
-
-1. Install conda
-2. Clone the Deep-Reinforcement-Learning-Nanodegree GitHub Repo\
-    https://github.com/udacity/deep-reinforcement-learning#dependencies
-  
+1. Install Anaconda (with Python 3.x)\
+    https://www.anaconda.com/products/individual
+    
+2. Create (if you haven't) a new environment with Python 3.6 by typing the following command in 
+    `conda create --name drlnd python=3.6`
+    
+3. Install (minimal install) `gym` by following the **Installation** of the openai GitHub:\
+    https://github.com/openai/gym#id5
+    
+4. Clone the Deep-Reinforcement-Learning-Nanodegree GitHub repository
+    ``` console
+    git clone https://github.com/udacity/deep-reinforcement-learning.git
+    cd deep-reinforcement-learning/python
+    pip install .
+    ```
 > (For Windows 10) If the error "Could not find a version that satisfies the requirement torch==0.4.0 (from unityagents==0.4.0)" occurs, please refer to this thread:\
     https://github.com/udacity/deep-reinforcement-learning/issues/13
   
-3. Download Unity's Reacher Environment or (Udacity's modified verson)\
+5. Download Unity's Reacher Environment or (Udacity's modified verson)\
     Windows (32-bit): https://s3-us-west-1.amazonaws.com/udacity-drlnd/P2/Reacher/Reacher_Windows_x86.zip \
     Windows (64-bit): https://s3-us-west-1.amazonaws.com/udacity-drlnd/P2/Reacher/Reacher_Windows_x86_64.zip
+    Extract the .zip file and move the folder `Reacher_Windows_x86_64` (or `Reacher_Windows_x86`) into the folder `p2_continuous-control` from Step 4 above.
 
+6. Download all the files (see the table below) from this repository. Place all files in the folder `p2_continuous-control` from Step 4.
 
-## Contents of files
+    | File Name | Notes |
+    | ----------- | ----------- |
+    | SL_reacher20_ddpg.ipynb | the main code |
+    | networkModels.py | the architectures of actor and critic |
+    | buffer.py | the replay buffer |
+    | ddpgAgent.py | the agent class |
+    | checkpoint_actor.pth | the saved weights for actor |
+    | checkpoint_critic.pth | the saved weights for critic |
 
-The repository contains:
-| File Name | Notes |
-| ----------- | ----------- |
-| SL_reacher20_ddpg.ipynb | main code |
-| networkModels.py | architectures of actor and critic |
-| buffer.py | replay buffer |
-| ddpgAgent.py | the agent class |
-| checkpoint_actor.pth | saved weights for actor |
-| checkpoint_critic.pth | saved weights for critic |
+7. You're ready to run the code! Please see the next section.
 
 ## How to run the code
 
-#### 1. Open `SL_reacher20_ddpg.ipynb` with Jupyter Notebook
-#### 2. Run `Box 1` to import packages
+#### 1. Run the Anaconda Prompt and navigate to the folder `p2_continuous-control`
+#### 2. Activate the drlnd environment
+``` python
+conda activate drlnd
+```
+#### 3. Run the Jupter Notebook by the command:
+``` cmd
+jupyter notebook
+```
+#### 4. Open `SL_reacher20_ddpg.ipynb` with Jupyter Notebook
+#### 5. Run `Box 1` to import packages
 Paste the path to Reacher.exe after the "file_name = "\
 for example, file_name = "./Reacher_20Agent_Windows_x86_64/Reacher.exe"
-#### 3. Run `Box 2` to set hyperparameters
+#### 6. Run `Box 2` to set hyperparameters
 For details of the hyperparameters, please refer to `Report.md`
-#### 4. Run `Box 3` to start training
+#### 7. Run `Box 3` to start training
 A figure of noise simulation will be displayed first, which can be used for tuning the hypermeters of the noise process.\
 After training, the weights of the actor and critic will be saved with the file names `checkpoint_actor.pth` and `checkpoint_critic.pth`
-#### 5. (Optional) Run `Box 4` to load the saved weights into the agent and watch the performance
-#### 6. Before closing, simply use the command `env.close()` to close the environment
+#### 8. (Optional) Run `Box 4` to load the saved weights into the agent and watch the performance
+#### 9. Before closing, simply use the command `env.close()` to close the environment
