@@ -1,4 +1,4 @@
-# DeepRL-continuous-control-reachers-udacity-drlnd-p2
+# Continuous Robotic Arm Control
 
 
 - Reinforcement learning environment by Unity ML-Agents
